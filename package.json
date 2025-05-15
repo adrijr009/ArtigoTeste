@@ -1,0 +1,22 @@
+{
+  "name": "artigo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress run",
+    "start": "test.cy.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cypress": "^13.16.1",
+    "cypress-real-events": "^1.13.0"
+  },
+  "devDependencies": {
+    "cypress-axe": "^1.6.0",
+    "cypress-plugin-tab": "^1.0.5",
+    "cypress-real-events": "^1.14.0"
+  }
+}
