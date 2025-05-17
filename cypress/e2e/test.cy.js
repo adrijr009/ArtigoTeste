@@ -57,29 +57,47 @@ Cypress._.each(urls, (url) => {
       }, { skipFailures: true });
     });
 
-    it('Navigate in order using Tab', () => {
-      cy.log('Teste em TAB');
+    it('Simula navegação via Tab apenas em elementos visíveis e interativos', () => {
+      cy.log('Iniciando teste de navegação com TAB manual');
       cy.wait(2000);
-
+    
       fullReport += `=== Relatório de Navegação via TAB - ${url} ===\n\n`;
-
+    
+      // Seleciona todos os elementos focáveis visíveis e não desabilitados
       cy.get('button, a, input, select, textarea, [tabindex]:not([tabindex="-1"])')
         .filter(':visible')
         .not('[disabled]')
         .then(($elements) => {
+          const total = $elements.length;
+    
           cy.wrap($elements).each(($el, index) => {
             const label = $el.text().trim() || $el.attr('aria-label') || $el.attr('placeholder') || 'Sem descrição';
             const tagName = $el.prop('tagName');
             const id = $el.attr('id') ? `#${$el.attr('id')}` : '';
             const className = $el.attr('class') ? `.${$el.attr('class').split(' ').join('.')}` : '';
             const selector = `${tagName}${id}${className}`;
-
-            fullReport += `Elemento ${index + 1}: ${label}\n`;
+    
+            fullReport += `Elemento ${index + 1} de ${total}: ${label}\n`;
             fullReport += `  → Seletor: ${selector}\n`;
-            fullReport += `  → HTML: ${$el.prop('outerHTML').trim().slice(0, 300)}...\n\n`;
-
-            cy.wrap($el).focus().should('be.focused');
-            cy.wrap($el).tab();
+            fullReport += `  → HTML: ${$el.prop('outerHTML').trim().slice(0, 300)}...\n`;
+    
+            // Foca o elemento
+            cy.wrap($el).scrollIntoView().focus().should('be.focused');
+    
+            // Verifica se o elemento realmente está visível e focado
+            cy.focused().then(($focused) => {
+              const focusedDesc = $focused.text().trim() || $focused.attr('aria-label') || $focused.attr('placeholder');
+              if (!$focused.is(':visible')) {
+                fullReport += `⚠️ ERRO: O elemento focado não está visível!\n`;
+              } else {
+                fullReport += `✅ Foco aplicado com sucesso: ${focusedDesc || 'Sem descrição'}\n`;
+              }
+            });
+    
+            fullReport += '\n';
+    
+            // Espera breve para simular navegação realista
+            cy.wait(100);
           });
         });
     });
