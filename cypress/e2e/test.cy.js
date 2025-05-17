@@ -23,12 +23,17 @@ Cypress._.each(urls, (url) => {
     });
 
     after(() => {
-      cy.writeFile(`cypress/reports/final-report-${sanitizedUrl}.txt`, fullReport, 'utf-8');
+      cy.task('generateHtml', {
+        fileName: `final-report-${sanitizedUrl}`,
+        title: `Relatório de Acessibilidade e Navegação - ${url}`,
+        content: fullReport
+      });
     });
+    
 
     it('Accessibility Violations', () => {
       cy.log('Teste de acessibilidade');
-      cy.wait(2000);
+      cy.wait(1500);
 
       cy.checkA11y(null, null, (violations) => {
         fullReport += `=== Relatório de Acessibilidade - ${url} ===\n\n`;
@@ -59,7 +64,7 @@ Cypress._.each(urls, (url) => {
 
     it('Simula navegação via Tab apenas em elementos visíveis e interativos', () => {
       cy.log('Iniciando teste de navegação com TAB manual');
-      cy.wait(2000);
+      cy.wait(1500);
     
       fullReport += `=== Relatório de Navegação via TAB - ${url} ===\n\n`;
     
@@ -97,14 +102,13 @@ Cypress._.each(urls, (url) => {
             fullReport += '\n';
     
             // Espera breve para simular navegação realista
-            cy.wait(100);
           });
         });
     });
 
     it('Checking Button Interaction', () => {
       cy.log('Teste interaçao de botão');
-      cy.wait(2000);
+      cy.wait(1500);
 
       fullReport += `\n\n===================================================\n`;
       fullReport += `=== Relatório de Interação com Botões - ${url} ===\n\n`;
