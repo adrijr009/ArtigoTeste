@@ -4,12 +4,10 @@ import 'cypress-real-events';
 const fs = require('fs');
 
 const urls = [
+  'https://transparencia.fortaleza.ce.gov.br/',
   'https://www.cge.ce.gov.br/',
-  //'https://www.casacivil.ce.gov.br/conselhos/',
-  //'https://www.casacivil.ce.gov.br/diario-oficial/',
   'https://portaldatransparencia.gov.br/',
   'https://portaldatransparencia.gov.br/despesas/visao-geral',
-  'https://transparencia.fortaleza.ce.gov.br/',
 ];
 
 Cypress.on('uncaught:exception', () => false);
@@ -36,7 +34,7 @@ Cypress._.each(urls, (url) => {
 
     it('Accessibility Violations', () => {
       cy.log('Teste de acessibilidade');
-      cy.wait(1500);
+      cy.wait(1200);
 
       cy.checkA11y(null, null, (violations) => {
         fullReport += `===== Relatório de Acessibilidade - ${url} =====\n\n`;
@@ -67,7 +65,7 @@ Cypress._.each(urls, (url) => {
 
     it('Simula navegação via Tab apenas em elementos visíveis e interativos', () => {
       cy.log('Iniciando teste de navegação com TAB manual');
-      cy.wait(1500);
+      cy.wait(1200);
 
       fullReport += `\n\n===== Relatório de Navegação via TAB - ${url} =====\n\n`;
 
@@ -127,7 +125,7 @@ Cypress._.each(urls, (url) => {
 
     it('Checking Button Interaction', () => {
       cy.log('Teste interaçao de botão');
-      cy.wait(1500);
+      cy.wait(1200);
 
       fullReport += `\n\n===== Relatório de Interação com Botões - ${url} =====\n\n`;
 
@@ -147,10 +145,11 @@ Cypress._.each(urls, (url) => {
             backgroundColor: button.css('background-color'),
             borderColor: button.css('border-color'),
             opacity: button.css('opacity'),
-            textDecoration: button.css('text-decoration')
+            textDecoration: button.css('text-decoration'),
           };
 
           cy.wrap(button).should('be.visible').realHover();
+          cy.wait(300);
 
           cy.wrap(button).then(($el) => {
             const current = {
