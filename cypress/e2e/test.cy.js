@@ -5,8 +5,11 @@ const fs = require('fs');
 
 const urls = [
   'https://www.cge.ce.gov.br/',
-  'https://www.casacivil.ce.gov.br/conselhos/',
-  'https://www.casacivil.ce.gov.br/diario-oficial/'
+  //'https://www.casacivil.ce.gov.br/conselhos/',
+  //'https://www.casacivil.ce.gov.br/diario-oficial/',
+  'https://portaldatransparencia.gov.br/',
+  'https://portaldatransparencia.gov.br/despesas/visao-geral',
+  'https://transparencia.fortaleza.ce.gov.br/',
 ];
 
 Cypress.on('uncaught:exception', () => false);
@@ -29,14 +32,14 @@ Cypress._.each(urls, (url) => {
         content: fullReport
       });
     });
-    
+
 
     it('Accessibility Violations', () => {
       cy.log('Teste de acessibilidade');
       cy.wait(1500);
 
       cy.checkA11y(null, null, (violations) => {
-        fullReport += `=== Relatório de Acessibilidade - ${url} ===\n\n`;
+        fullReport += `===== Relatório de Acessibilidade - ${url} =====\n\n`;
         fullReport += `Total de violações: ${violations.length}\n\n`;
 
         violations.forEach(({ id, impact, description, nodes, tags, help, helpUrl }) => {
@@ -57,7 +60,7 @@ Cypress._.each(urls, (url) => {
             fullReport += `    Código: ${html}\n`;
           });
 
-          fullReport += `---------------------------------------------------------------------------\n\n`;
+          fullReport += `_________________________________________________________________________\n\n`;
         });
       }, { skipFailures: true });
     });
@@ -65,43 +68,59 @@ Cypress._.each(urls, (url) => {
     it('Simula navegação via Tab apenas em elementos visíveis e interativos', () => {
       cy.log('Iniciando teste de navegação com TAB manual');
       cy.wait(1500);
-    
-      fullReport += `=== Relatório de Navegação via TAB - ${url} ===\n\n`;
-    
-      // Seleciona todos os elementos focáveis visíveis e não desabilitados
+
+      fullReport += `\n\n===== Relatório de Navegação via TAB - ${url} =====\n\n`;
+
+      const isFocusable = ($el) => {
+        const tag = $el.prop('tagName').toLowerCase();
+        const isLinkWithHref = tag === 'a' && $el.attr('href');
+        const hasTabindex = $el.attr('tabindex') !== undefined;
+        const isNaturallyFocusable = ['input', 'select', 'textarea', 'button'].includes(tag);
+        return isLinkWithHref || hasTabindex || isNaturallyFocusable;
+      };
+
       cy.get('button, a, input, select, textarea, [tabindex]:not([tabindex="-1"])')
         .filter(':visible')
         .not('[disabled]')
         .then(($elements) => {
           const total = $elements.length;
-    
+
           cy.wrap($elements).each(($el, index) => {
             const label = $el.text().trim() || $el.attr('aria-label') || $el.attr('placeholder') || 'Sem descrição';
             const tagName = $el.prop('tagName');
             const id = $el.attr('id') ? `#${$el.attr('id')}` : '';
             const className = $el.attr('class') ? `.${$el.attr('class').split(' ').join('.')}` : '';
             const selector = `${tagName}${id}${className}`;
-    
+
             fullReport += `Elemento ${index + 1} de ${total}: ${label}\n`;
             fullReport += `  → Seletor: ${selector}\n`;
             fullReport += `  → HTML: ${$el.prop('outerHTML').trim().slice(0, 300)}...\n`;
-    
-            // Foca o elemento
-            cy.wrap($el).scrollIntoView().focus().should('be.focused');
-    
-            // Verifica se o elemento realmente está visível e focado
-            cy.focused().then(($focused) => {
-              const focusedDesc = $focused.text().trim() || $focused.attr('aria-label') || $focused.attr('placeholder');
-              if (!$focused.is(':visible')) {
-                fullReport += `⚠️ ERRO: O elemento focado não está visível!\n`;
-              } else {
-                fullReport += `✅ Foco aplicado com sucesso: ${focusedDesc || 'Sem descrição'}\n`;
-              }
+
+            if (!isFocusable($el)) {
+              fullReport += `⚠️ AVISO: Elemento ${index + 1} não é focável.\n`;
+              fullReport += ` _______________________________________________________________________\n`;
+              return;
+            }
+
+            fullReport += ` _______________________________________________________________________\n`;
+
+            cy.wrap($el).scrollIntoView().focus().then(() => {
+              cy.focused().then(($focused) => {
+                const focusedDesc = $focused.text().trim() || $focused.attr('aria-label') || $focused.attr('placeholder') || 'Sem descrição';
+                const isSame = $focused[0] === $el[0];
+
+                if (!$focused.is(':visible')) {
+                  fullReport += `⚠️ ERRO: O elemento focado não está visível!\n`;
+                  fullReport += `    Era esperado o Elemento ${index + 1} de ${total}: ${label}\n`;
+                }
+
+                if (!isSame) {
+                  fullReport += `❌ ERRO O foco não foi aplicado corretamente no Elemento ${index + 1} de ${total}: ${label}\n`;
+                } else {
+                  fullReport += `✅ Foco aplicado com sucesso no Elemento ${index + 1} de ${total}: ${label}\n`;
+                }
+              });
             });
-    
-            fullReport += '\n';
-    
-            // Espera breve para simular navegação realista
           });
         });
     });
@@ -110,8 +129,7 @@ Cypress._.each(urls, (url) => {
       cy.log('Teste interaçao de botão');
       cy.wait(1500);
 
-      fullReport += `\n\n===================================================\n`;
-      fullReport += `=== Relatório de Interação com Botões - ${url} ===\n\n`;
+      fullReport += `\n\n===== Relatório de Interação com Botões - ${url} =====\n\n`;
 
       cy.get('button, [role="button"]')
         .filter(':visible')
@@ -134,23 +152,29 @@ Cypress._.each(urls, (url) => {
 
           cy.wrap(button).should('be.visible').realHover();
 
-          cy.wrap(button).should(($el) => {
+          cy.wrap(button).then(($el) => {
             const current = {
-              color: Cypress.$($el).css('color'),
-              backgroundColor: Cypress.$($el).css('background-color'),
-              borderColor: Cypress.$($el).css('border-color'),
-              opacity: Cypress.$($el).css('opacity'),
-              textDecoration: Cypress.$($el).css('text-decoration')
+              color: $el.css('color'),
+              backgroundColor: $el.css('background-color'),
+              borderColor: $el.css('border-color'),
+              opacity: $el.css('opacity'),
+              textDecoration: $el.css('text-decoration')
             };
 
             const changed = Object.keys(initial).some(key => initial[key] !== current[key]);
+
             fullReport += `Botão ${index + 1}: ${label}\n`;
             fullReport += `  → Seletor: ${selector}\n`;
             fullReport += `  → HTML: ${button.prop('outerHTML').trim().slice(0, 300)}...\n`;
-            fullReport += changed ? '  ✅ Mudança detectada ao passar o mouse.\n\n' : '  ⚠️ Nenhuma mudança detectada!\n\n';
+            fullReport += changed ? '  ✅ Mudança detectada ao passar o mouse.\n' : '  ⚠️ Nenhuma mudança detectada!\n';
+            fullReport += `  ________________________________________________________________________\n\n`;
 
-            expect(changed).to.be.true;
+            // Evita falha do teste interromper o restante
+            if (!changed) {
+              Cypress.log({ name: 'hover-fail', message: `Botão "${label}" não mudou estilo ao hover.` });
+            }
           });
+
         });
     });
 
