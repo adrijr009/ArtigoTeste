@@ -5,9 +5,11 @@ const fs = require('fs');
 
 const urls = [
   'https://transparencia.fortaleza.ce.gov.br/',
+  'https://compras.sepog.fortaleza.ce.gov.br/publico/licitacoes.asp',
   'https://www.cge.ce.gov.br/',
+  'https://www.cge.ce.gov.br/qualidade/',
+  'https://www.gov.br/pt-br',
   'https://portaldatransparencia.gov.br/',
-  'https://portaldatransparencia.gov.br/despesas/visao-geral',
 ];
 
 Cypress.on('uncaught:exception', () => false);

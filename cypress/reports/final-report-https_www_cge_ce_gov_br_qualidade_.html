@@ -1,0 +1,362 @@
+
+            <!DOCTYPE html>
+            <html lang="pt-BR">
+            <head>
+              <meta charset="UTF-8">
+              <title>Relatório de Acessibilidade e Navegação - https://www.cge.ce.gov.br/qualidade/</title>
+              <style>
+                body { font-family: Arial, sans-serif; padding: 2rem; background: #f4f4f4; }
+                pre {
+                  background: #fff;
+                  padding: 1rem;
+                  border: 1px solid #ddd;
+                  border-radius: 8px;
+                  white-space: pre-wrap;
+                }
+              </style>
+            </head>
+            <body>
+              <h1>Relatório de Acessibilidade e Navegação - https://www.cge.ce.gov.br/qualidade/</h1>
+              <pre>===== Relatório de Acessibilidade - https://www.cge.ce.gov.br/qualidade/ =====
+
+Total de violações: 7
+
+ID: color-contrast
+Impacto: serious
+Nível WCAG: AA
+Descrição: Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds
+Sugestão: Elements must meet minimum color contrast ratio thresholds
+Mais informações: https://dequeuniversity.com/rules/axe/4.10/color-contrast?application=axeAPI
+Tags: cat.color, wcag2aa, wcag143, TTv5, TT13.c, EN-301-549, EN-9.1.4.3, ACT
+  - Elemento: h3
+    Código: &lt;h3 class="text-center mb-0"&gt;O QUE VOCÊ &lt;br&gt;PRECISA?&lt;/h3&gt;
+  - Elemento: .col-auto.p-0:nth-child(1) &gt; .align-items-center.d-flex[target="_blank"] &gt; div:nth-child(2)
+    Código: &lt;div&gt;OUVIDORIA&lt;br&gt;ESTADUAL&lt;/div&gt;
+  - Elemento: .col-auto.p-0:nth-child(2) &gt; .align-items-center.d-flex[target="_blank"] &gt; div:nth-child(2)
+    Código: &lt;div&gt;CEARÁ&lt;br&gt;TRANSPARENTE&lt;/div&gt;
+  - Elemento: a[href$="acesso-a-informacao"] &gt; div:nth-child(2)
+    Código: &lt;div&gt;ACESSO À&lt;br&gt;INFORMAÇÃO&lt;/div&gt;
+  - Elemento: #menu-item-9 &gt; a[href="javascript:;"]
+    Código: &lt;a href="javascript:;"&gt;Institucional&lt;/a&gt;
+  - Elemento: #menu-item-68217 &gt; a[href="javascript:;"]
+    Código: &lt;a href="javascript:;"&gt;Serviços&lt;/a&gt;
+  - Elemento: #menu-item-5167 &gt; a
+    Código: &lt;a href="https://www.cge.ce.gov.br/sistemas/"&gt;Sistemas&lt;/a&gt;
+  - Elemento: .titulo &gt; strong
+    Código: &lt;strong&gt;Sistema de Gestão da Qualidade&lt;/strong&gt;
+  - Elemento: p &gt; a[target="_blank"]
+    Código: &lt;a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/cookie-usage?hl=pt-br" target="_blank"&gt;Clique aqui&lt;/a&gt;
+  - Elemento: #cc-cookies-confirm-consent
+    Código: &lt;button id="cc-cookies-confirm-consent"&gt;OK&lt;/button&gt;
+_________________________________________________________________________
+
+ID: heading-order
+Impacto: moderate
+Nível WCAG: Desconhecido
+Descrição: Ensure the order of headings is semantically correct
+Sugestão: Heading levels should only increase by one
+Mais informações: https://dequeuniversity.com/rules/axe/4.10/heading-order?application=axeAPI
+Tags: cat.semantics, best-practice
+  - Elemento: h4
+    Código: &lt;h4&gt;Acesso Rápido&lt;/h4&gt;
+_________________________________________________________________________
+
+ID: landmark-complementary-is-top-level
+Impacto: moderate
+Nível WCAG: Desconhecido
+Descrição: Ensure the complementary landmark or aside is at top level
+Sugestão: Aside should not be contained in another landmark
+Mais informações: https://dequeuniversity.com/rules/axe/4.10/landmark-complementary-is-top-level?application=axeAPI
+Tags: cat.semantics, best-practice
+  - Elemento: aside
+    Código: &lt;aside class="sidebar dt-4 -padfix"&gt;
+_________________________________________________________________________
+
+ID: landmark-unique
+Impacto: moderate
+Nível WCAG: Desconhecido
+Descrição: Ensure landmarks are unique
+Sugestão: Landmarks should have a unique role or role/label/title (i.e. accessible name) combination
+Mais informações: https://dequeuniversity.com/rules/axe/4.10/landmark-unique?application=axeAPI
+Tags: cat.semantics, best-practice
+  - Elemento: .justify-content-end.col-auto.d-flex &gt; nav
+    Código: &lt;nav class="d-inline-block"&gt;
+_________________________________________________________________________
+
+ID: meta-viewport
+Impacto: critical
+Nível WCAG: AA
+Descrição: Ensure &lt;meta name="viewport"&gt; does not disable text scaling and zooming
+Sugestão: Zooming and scaling must not be disabled
+Mais informações: https://dequeuniversity.com/rules/axe/4.10/meta-viewport?application=axeAPI
+Tags: cat.sensory-and-visual-cues, wcag2aa, wcag144, EN-301-549, EN-9.1.4.4, ACT
+  - Elemento: #viewport
+    Código: &lt;meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"&gt;
+_________________________________________________________________________
+
+ID: page-has-heading-one
+Impacto: moderate
+Nível WCAG: Desconhecido
+Descrição: Ensure that the page, or at least one of its frames contains a level-one heading
+Sugestão: Page should contain a level-one heading
+Mais informações: https://dequeuniversity.com/rules/axe/4.10/page-has-heading-one?application=axeAPI
+Tags: cat.semantics, best-practice
+  - Elemento: html
+    Código: &lt;html lang="pt-BR" class="no-js"&gt;
+_________________________________________________________________________
+
+ID: region
+Impacto: moderate
+Nível WCAG: Desconhecido
+Descrição: Ensure all page content is contained by landmarks
+Sugestão: All page content should be contained by landmarks
+Mais informações: https://dequeuniversity.com/rules/axe/4.10/region?application=axeAPI
+Tags: cat.keyboard, best-practice
+  - Elemento: h4
+    Código: &lt;h4&gt;Acesso Rápido&lt;/h4&gt;
+  - Elemento: #cc-cookies &gt; p
+    Código: &lt;p&gt;
+_________________________________________________________________________
+
+
+
+===== Relatório de Navegação via TAB - https://www.cge.ce.gov.br/qualidade/ =====
+
+Elemento 1 de 40: PORTAL DO GOVERNO
+  → Seletor: A
+  → HTML: &lt;a target="_blank" rel="noopener noreferrer" href="http://www.ceara.gov.br"&gt;&lt;span&gt;PORTAL DO GOVERNO&lt;/span&gt;&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 2 de 40: INTRANET
+  → Seletor: A
+  → HTML: &lt;a target="_blank" rel="noopener noreferrer" href="http://intranet.cge.ce.gov.br/"&gt;&lt;span&gt;INTRANET&lt;/span&gt;&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 3 de 40: WEBMAIL
+  → Seletor: A
+  → HTML: &lt;a target="_blank" rel="noopener noreferrer" href="http://webmail.cge.ce.gov.br"&gt;&lt;span&gt;WEBMAIL&lt;/span&gt;&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 4 de 40: Sem descrição
+  → Seletor: A.glink.nturl.notranslate
+  → HTML: &lt;a href="#" title="English" data-gt-lang="en" class="glink nturl notranslate"&gt;&lt;img loading="lazy" src="/wp-content/plugins/gtranslate/flags/svg/en.svg" width="24" height="24" alt="en"&gt;&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 5 de 40: Sem descrição
+  → Seletor: A.glink.nturl.notranslate
+  → HTML: &lt;a href="#" title="French" data-gt-lang="fr" class="glink nturl notranslate"&gt;&lt;img loading="lazy" src="/wp-content/plugins/gtranslate/flags/svg/fr.svg" width="24" height="24" alt="fr"&gt;&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 6 de 40: Sem descrição
+  → Seletor: A.glink.nturl.notranslate.gt-current-lang
+  → HTML: &lt;a href="#" title="Portuguese" data-gt-lang="pt" class="glink nturl notranslate gt-current-lang"&gt;&lt;img loading="lazy" src="/wp-content/plugins/gtranslate/flags/svg/pt-br.svg" width="24" height="24" alt="pt"&gt;&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 7 de 40: Sem descrição
+  → Seletor: A.glink.nturl.notranslate
+  → HTML: &lt;a href="#" title="Spanish" data-gt-lang="es" class="glink nturl notranslate"&gt;&lt;img loading="lazy" src="/wp-content/plugins/gtranslate/flags/svg/es.svg" width="24" height="24" alt="es"&gt;&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 8 de 40: Sem descrição
+  → Seletor: A.menu-accessibility__link.menu-accessibility__link--normal
+  → HTML: &lt;a href="javascript:;" class="menu-accessibility__link menu-accessibility__link--normal" title="Fonte tamanho normal"&gt;
+                                                &lt;img src="https://www.cge.ce.gov.br/wp-content/themes/ceara2017/assets/images/font-normal-02.svg" alt="Fonte tamanho normal" class="m...
+ _______________________________________________________________________
+Elemento 9 de 40: Sem descrição
+  → Seletor: A.menu-accessibility__link.menu-accessibility__link--decrease
+  → HTML: &lt;a href="javascript:;" class="menu-accessibility__link menu-accessibility__link--decrease" title="Diminuir a fonte"&gt;
+                                                &lt;img src="https://www.cge.ce.gov.br/wp-content/themes/ceara2017/assets/images/font-less-02.svg" alt="Dominuir a fonte" class="menu-acce...
+ _______________________________________________________________________
+Elemento 10 de 40: Sem descrição
+  → Seletor: A.menu-accessibility__link.menu-accessibility__link--increase
+  → HTML: &lt;a href="javascript:;" class="menu-accessibility__link menu-accessibility__link--increase" title="Aumentar a fonte"&gt;
+                                                &lt;img src="https://www.cge.ce.gov.br/wp-content/themes/ceara2017/assets/images/font-plus-02.svg" alt="Aumentar a fonte" class="menu-acce...
+ _______________________________________________________________________
+Elemento 11 de 40: Sem descrição
+  → Seletor: A.menu-accessibility__link.menu-accessibility__link--contraste
+  → HTML: &lt;a href="javascript:;" class="menu-accessibility__link menu-accessibility__link--contraste" title="Contraste da tela"&gt;
+                                                &lt;img src="https://www.cge.ce.gov.br/wp-content/themes/ceara2017/assets/images/icon-contraste-02.svg" alt="Contraste da tela" class="m...
+ _______________________________________________________________________
+Elemento 12 de 40: Sem descrição
+  → Seletor: A.d-block.pr-5.text-center
+  → HTML: &lt;a href="https://www.cge.ce.gov.br" class="d-block pr-5 text-center"&gt;
+                                            &lt;img src="https://www.cge.ce.gov.br/wp-content/uploads/sites/20/2021/05/Controladoria-e-Ouvidoria-Geral-do-Estado-INVERTIDA-WEB-BRANCA-MENORZINHA.png" alt="Controladoria e Ouvidoria Gera...
+ _______________________________________________________________________
+Elemento 13 de 40: Ex: IPVA, Conta de Água, Hospitais, Notícias...
+  → Seletor: INPUT.form-control
+  → HTML: &lt;input type="text" class="form-control" name="s" placeholder="Ex: IPVA, Conta de Água, Hospitais, Notícias..." aria-label="Ex: IPVA, Conta de Água, Hospitais, Notícias..." aria-describedby="button-search" value=""&gt;...
+ _______________________________________________________________________
+Elemento 14 de 40: Sem descrição
+  → Seletor: BUTTON#button-search.btn.btn-outline-secondary
+  → HTML: &lt;button class="btn btn-outline-secondary" type="submit" id="button-search"&gt;
+                                                        &lt;img src="https://www.cge.ce.gov.br/wp-content/themes/ceara2017/assets/images/busca-icon.png" alt="Ícone de busca"&gt;
+                                                    ...
+ _______________________________________________________________________
+Elemento 15 de 40: OUVIDORIAESTADUAL
+  → Seletor: A.d-flex.align-items-center
+  → HTML: &lt;a target="_blank" href="https://cearatransparente.ce.gov.br/portal-da-transparencia/ouvidoria?locale=pt-BR" class="d-flex align-items-center"&gt;
+                                                &lt;div&gt;
+                                                    &lt;img src="https://www.cge.ce.gov.br/wp-content/the...
+ _______________________________________________________________________
+Elemento 16 de 40: CEARÁTRANSPARENTE
+  → Seletor: A.d-flex.align-items-center
+  → HTML: &lt;a target="_blank" href="https://cearatransparente.ce.gov.br/" class="d-flex align-items-center"&gt;
+                                                &lt;div&gt;
+                                                    &lt;img src="https://www.cge.ce.gov.br/wp-content/themes/ceara2017/assets/images/icon-search.svg" a...
+ _______________________________________________________________________
+Elemento 17 de 40: ACESSO ÀINFORMAÇÃO
+  → Seletor: A.d-flex.align-items-center
+  → HTML: &lt;a href="/acesso-a-informacao" class="d-flex align-items-center"&gt;
+                                                &lt;div&gt;
+                                                    &lt;img src="https://www.cge.ce.gov.br/wp-content/themes/ceara2017/assets/images/icon-info.svg" alt="Icone a acesso à informação"&gt;
+...
+ _______________________________________________________________________
+Elemento 18 de 40: Institucional
+  → Seletor: A
+  → HTML: &lt;a href="javascript:;"&gt;Institucional&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 19 de 40: Serviços
+  → Seletor: A
+  → HTML: &lt;a href="javascript:;"&gt;Serviços&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 20 de 40: Sistemas
+  → Seletor: A
+  → HTML: &lt;a href="https://www.cge.ce.gov.br/sistemas/"&gt;Sistemas&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 21 de 40: Certificado CGE – ISO 9001:2015
+  → Seletor: A
+  → HTML: &lt;a href="https://www.cge.ce.gov.br/wp-content/uploads/sites/20/2024/03/Certificado-Vanzolini-2026-em-portugues.pdf"&gt;Certificado CGE – ISO 9001:2015&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 22 de 40: Política da Qualidade
+  → Seletor: A
+  → HTML: &lt;a href=" https://www.cge.ce.gov.br/qualidade/politica/" target="_blank"&gt;Política da Qualidade&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 23 de 40: Escopo e  Objetivos da Qualidade
+  → Seletor: A
+  → HTML: &lt;a href=" https://www.cge.ce.gov.br/escopo-e-objetivos-da-qualidade/" target="_blank"&gt;Escopo e  Objetivos da Qualidade&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 24 de 40: Comitê de Integridade, Riscos e Qualidade
+  → Seletor: A
+  → HTML: &lt;a href="https://www.cge.ce.gov.br/comite-da-qualidade/" target="_blank"&gt;Comitê de Integridade, Riscos e Qualidade&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 25 de 40: Macroprocesso / Processo
+  → Seletor: A
+  → HTML: &lt;a href="https://www.cge.ce.gov.br/mapas-de-macroprocesso-e-procedimentos/" target="_blank"&gt; Macroprocesso / Processo&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 26 de 40: Indicadores da Qualidade
+  → Seletor: A
+  → HTML: &lt;a href="https://www.cge.ce.gov.br/painel-de-controle-da-qualidade/"&gt; Indicadores da Qualidade&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 27 de 40: Pesquisa de Satisfação
+  → Seletor: A
+  → HTML: &lt;a href="https://www.cge.ce.gov.br/pesquisa-de-satisfacao/"&gt;Pesquisa de Satisfação&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 28 de 40: Ceará Transparente
+  → Seletor: A
+  → HTML: &lt;a href="https://cearatransparente.ce.gov.br" target="_blank"&gt;&lt;i class="PortalTransparencia"&gt;&lt;/i&gt;Ceará&lt;br&gt; Transparente&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 29 de 40: Carta de Serviçosdo Cidadão
+  → Seletor: A
+  → HTML: &lt;a href="http://cartadeservicos.ce.gov.br/" target="_blank"&gt;&lt;i class="AcessoCidadao"&gt;&lt;/i&gt;Carta de Serviços&lt;br&gt;do Cidadão&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 30 de 40: Lei geral de acesso à informação
+  → Seletor: A
+  → HTML: &lt;a href="https://cearatransparente.ce.gov.br/portal-da-transparencia/acesso-a-informacao?locale=pt-BR" target="_blank"&gt;&lt;i class="AcessoInformacao"&gt;&lt;/i&gt;Lei geral de&lt;br&gt; acesso à informação&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 31 de 40: Diário Oficial
+  → Seletor: A
+  → HTML: &lt;a href="http://pesquisa.doe.seplag.ce.gov.br/" target="_blank"&gt;&lt;i class="DiarioOficial"&gt;&lt;/i&gt;Diário&lt;br&gt; Oficial&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 32 de 40: Legislação Estadual
+  → Seletor: A
+  → HTML: &lt;a href="https://www.al.ce.gov.br/" target="_blank"&gt;&lt;i class="Legislacao"&gt;&lt;/i&gt;Legislação&lt;br&gt; Estadual&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 33 de 40: Ações de Governo
+  → Seletor: A
+  → HTML: &lt;a href="http://www.ceara.gov.br/governo/"&gt;&lt;i class="AcoesGoverno"&gt;&lt;/i&gt;Ações de&lt;br&gt; Governo&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 34 de 40: CGE.CE.GOV.BR
+  → Seletor: A.link-gov
+  → HTML: &lt;a class="link-gov" href="http://WWW.CGE.CE.GOV.BR"&gt;
+                            &lt;h2&gt;CGE.CE.GOV.BR&lt;/h2&gt;
+                        &lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 35 de 40: Facebook
+  → Seletor: A
+  → HTML: &lt;a href="https://www.facebook.com/cgeceara/" style="overflow: hidden;" target="_blank"&gt;Facebook&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 36 de 40: Instagram
+  → Seletor: A
+  → HTML: &lt;a href="https://www.instagram.com/cgeceara/" style="overflow: hidden;" target="_blank"&gt;Instagram&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 37 de 40: Twitter
+  → Seletor: A
+  → HTML: &lt;a href="https://twitter.com/cgeceara" style="overflow: hidden;" target="_blank"&gt;Twitter&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 38 de 40: Youtube
+  → Seletor: A
+  → HTML: &lt;a href="https://www.youtube.com/channel/UCzBrWrD7mb0rK5O9zLVOZjA" style="overflow: hidden;" target="_blank"&gt;Youtube&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 39 de 40: Clique aqui
+  → Seletor: A
+  → HTML: &lt;a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/cookie-usage?hl=pt-br" target="_blank"&gt;Clique aqui&lt;/a&gt;...
+ _______________________________________________________________________
+Elemento 40 de 40: OK
+  → Seletor: BUTTON#cc-cookies-confirm-consent
+  → HTML: &lt;button id="cc-cookies-confirm-consent"&gt;OK&lt;/button&gt;...
+ _______________________________________________________________________
+✅ Foco aplicado com sucesso no Elemento 1 de 40: PORTAL DO GOVERNO
+✅ Foco aplicado com sucesso no Elemento 2 de 40: INTRANET
+✅ Foco aplicado com sucesso no Elemento 3 de 40: WEBMAIL
+✅ Foco aplicado com sucesso no Elemento 4 de 40: Sem descrição
+✅ Foco aplicado com sucesso no Elemento 5 de 40: Sem descrição
+✅ Foco aplicado com sucesso no Elemento 6 de 40: Sem descrição
+✅ Foco aplicado com sucesso no Elemento 7 de 40: Sem descrição
+✅ Foco aplicado com sucesso no Elemento 8 de 40: Sem descrição
+✅ Foco aplicado com sucesso no Elemento 9 de 40: Sem descrição
+✅ Foco aplicado com sucesso no Elemento 10 de 40: Sem descrição
+✅ Foco aplicado com sucesso no Elemento 11 de 40: Sem descrição
+✅ Foco aplicado com sucesso no Elemento 12 de 40: Sem descrição
+✅ Foco aplicado com sucesso no Elemento 13 de 40: Ex: IPVA, Conta de Água, Hospitais, Notícias...
+✅ Foco aplicado com sucesso no Elemento 14 de 40: Sem descrição
+✅ Foco aplicado com sucesso no Elemento 15 de 40: OUVIDORIAESTADUAL
+✅ Foco aplicado com sucesso no Elemento 16 de 40: CEARÁTRANSPARENTE
+✅ Foco aplicado com sucesso no Elemento 17 de 40: ACESSO ÀINFORMAÇÃO
+✅ Foco aplicado com sucesso no Elemento 18 de 40: Institucional
+✅ Foco aplicado com sucesso no Elemento 19 de 40: Serviços
+✅ Foco aplicado com sucesso no Elemento 20 de 40: Sistemas
+✅ Foco aplicado com sucesso no Elemento 21 de 40: Certificado CGE – ISO 9001:2015
+✅ Foco aplicado com sucesso no Elemento 22 de 40: Política da Qualidade
+✅ Foco aplicado com sucesso no Elemento 23 de 40: Escopo e  Objetivos da Qualidade
+✅ Foco aplicado com sucesso no Elemento 24 de 40: Comitê de Integridade, Riscos e Qualidade
+✅ Foco aplicado com sucesso no Elemento 25 de 40: Macroprocesso / Processo
+✅ Foco aplicado com sucesso no Elemento 26 de 40: Indicadores da Qualidade
+✅ Foco aplicado com sucesso no Elemento 27 de 40: Pesquisa de Satisfação
+✅ Foco aplicado com sucesso no Elemento 28 de 40: Ceará Transparente
+✅ Foco aplicado com sucesso no Elemento 29 de 40: Carta de Serviçosdo Cidadão
+✅ Foco aplicado com sucesso no Elemento 30 de 40: Lei geral de acesso à informação
+✅ Foco aplicado com sucesso no Elemento 31 de 40: Diário Oficial
+✅ Foco aplicado com sucesso no Elemento 32 de 40: Legislação Estadual
+✅ Foco aplicado com sucesso no Elemento 33 de 40: Ações de Governo
+✅ Foco aplicado com sucesso no Elemento 34 de 40: CGE.CE.GOV.BR
+✅ Foco aplicado com sucesso no Elemento 35 de 40: Facebook
+✅ Foco aplicado com sucesso no Elemento 36 de 40: Instagram
+✅ Foco aplicado com sucesso no Elemento 37 de 40: Twitter
+✅ Foco aplicado com sucesso no Elemento 38 de 40: Youtube
+✅ Foco aplicado com sucesso no Elemento 39 de 40: Clique aqui
+✅ Foco aplicado com sucesso no Elemento 40 de 40: OK
+
+
+===== Relatório de Interação com Botões - https://www.cge.ce.gov.br/qualidade/ =====
+
+Botão 1: Sem descrição
+  → Seletor: BUTTON#button-search.btn.btn-outline-secondary
+  → HTML: &lt;button class="btn btn-outline-secondary" type="submit" id="button-search"&gt;
+                                                        &lt;img src="https://www.cge.ce.gov.br/wp-content/themes/ceara2017/assets/images/busca-icon.png" alt="Ícone de busca"&gt;
+                                                    ...
+  ✅ Mudança detectada ao passar o mouse.
+  ________________________________________________________________________
+
+Botão 2: OK
+  → Seletor: BUTTON#cc-cookies-confirm-consent
+  → HTML: &lt;button id="cc-cookies-confirm-consent"&gt;OK&lt;/button&gt;...
+  ⚠️ Nenhuma mudança detectada!
+  ________________________________________________________________________
+
+</pre>
+            </body>
+            </html>
+          
