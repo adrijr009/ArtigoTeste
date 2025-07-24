@@ -27,7 +27,6 @@ Cypress._.each(urls, (url) => {
       });
     });
 
-
     it('Accessibility Violations', () => {
       cy.log('Teste de acessibilidade');
       cy.wait(1200);
@@ -59,7 +58,7 @@ Cypress._.each(urls, (url) => {
       }, { skipFailures: true });
     });
 
-    it('Simula navegação via Tab apenas em elementos visíveis e interativos', () => {
+    it('Simulate navigation via Tab', () => {
       cy.log('Iniciando teste de navegação com TAB manual');
       cy.wait(1200);
 
@@ -79,43 +78,62 @@ Cypress._.each(urls, (url) => {
         .then(($elements) => {
           const total = $elements.length;
 
-          cy.wrap($elements).each(($el, index) => {
+          const processElement = (index) => {
+            if (index >= total) return; // fim da recursão
+
+            const el = $elements[index];
+            const $el = Cypress.$(el);
+
             const label = $el.text().trim() || $el.attr('aria-label') || $el.attr('placeholder') || 'Sem descrição';
             const tagName = $el.prop('tagName');
             const id = $el.attr('id') ? `#${$el.attr('id')}` : '';
             const className = $el.attr('class') ? `.${$el.attr('class').split(' ').join('.')}` : '';
             const selector = `${tagName}${id}${className}`;
+            const htmlSnippet = $el.prop('outerHTML').trim().slice(0, 300);
 
-            fullReport += `Elemento ${index + 1} de ${total}: ${label}\n`;
-            fullReport += `  → Seletor: ${selector}\n`;
-            fullReport += `  → HTML: ${$el.prop('outerHTML').trim().slice(0, 300)}...\n`;
+            let report;
+            report += `Elemento ${index + 1} de ${total}: ${label}\n`;
+            report += `  → Seletor: ${selector}\n`;
+            report += `  → HTML: ${htmlSnippet}...\n`;
+
+            const isFocusable = ($el) => {
+              const tag = $el.prop('tagName').toLowerCase();
+              const isLinkWithHref = tag === 'a' && $el.attr('href');
+              const hasTabindex = $el.attr('tabindex') !== undefined;
+              const isNaturallyFocusable = ['input', 'select', 'textarea', 'button'].includes(tag);
+              return isLinkWithHref || hasTabindex || isNaturallyFocusable;
+            };
 
             if (!isFocusable($el)) {
-              fullReport += `⚠️ AVISO: Elemento ${index + 1} não é focável.\n`;
-              fullReport += ` _______________________________________________________________________\n`;
+              report += `⚠️ AVISO: Elemento não é focável.\n`;
+              report += `_______________________________________________________________________\n`;
+              fullReport += `\n${report}`;
+              processElement(index + 1);
               return;
             }
 
-            fullReport += ` _______________________________________________________________________\n`;
+            cy.wrap($el)
+              .scrollIntoView()
+              .then(() => {
+                $el[0].focus();
 
-            cy.wrap($el).scrollIntoView().focus().then(() => {
-              cy.focused().then(($focused) => {
-                const focusedDesc = $focused.text().trim() || $focused.attr('aria-label') || $focused.attr('placeholder') || 'Sem descrição';
-                const isSame = $focused[0] === $el[0];
-
-                if (!$focused.is(':visible')) {
-                  fullReport += `⚠️ ERRO: O elemento focado não está visível!\n`;
-                  fullReport += `    Era esperado o Elemento ${index + 1} de ${total}: ${label}\n`;
-                }
-
-                if (!isSame) {
-                  fullReport += `❌ ERRO O foco não foi aplicado corretamente no Elemento ${index + 1} de ${total}: ${label}\n`;
-                } else {
-                  fullReport += `✅ Foco aplicado com sucesso no Elemento ${index + 1} de ${total}: ${label}\n`;
-                }
+                cy.focused().then(($focused) => {
+                  if (!$focused.is(':visible')) {
+                    report += `⚠️ ERRO: O elemento focado não está visível!\n`;
+                    report += `    Era esperado o Elemento ${index + 1} de ${total}\n`;
+                  } else if ($focused[0] !== $el[0]) {
+                    report += `❌ ERRO: O foco não foi aplicado corretamente \n`;
+                  } else {
+                    report += `✅ Foco aplicado com sucesso \n`;
+                  }
+                  report += `_______________________________________________________________________\n`;
+                  fullReport += `\n${report}`;
+                  processElement(index + 1); // chama o próximo na sequência
+                });
               });
-            });
-          });
+          };
+          // Inicia a recursão no primeiro elemento
+          processElement(0);
         });
     });
 
@@ -146,7 +164,6 @@ Cypress._.each(urls, (url) => {
 
           cy.wrap(button).should('be.visible').realHover();
           cy.wait(300);
-
           cy.wrap(button).then(($el) => {
             const current = {
               color: $el.css('color'),
@@ -169,9 +186,7 @@ Cypress._.each(urls, (url) => {
               Cypress.log({ name: 'hover-fail', message: `Botão "${label}" não mudou estilo ao hover.` });
             }
           });
-
         });
     });
-
   });
 });
