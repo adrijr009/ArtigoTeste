@@ -29,7 +29,7 @@ Cypress._.each(urls, (url) => {
 
     it('Accessibility Violations', () => {
       cy.log('Teste de acessibilidade');
-      cy.wait(1200);
+      cy.wait(2000);
 
       cy.checkA11y(null, null, (violations) => {
         fullReport += `===== Relatório de Acessibilidade - ${url} =====\n\n`;
@@ -60,7 +60,7 @@ Cypress._.each(urls, (url) => {
 
     it('Simulate navigation via Tab', () => {
       cy.log('Iniciando teste de navegação com TAB manual');
-      cy.wait(1200);
+      cy.wait(2000);
 
       fullReport += `\n\n===== Relatório de Navegação via TAB - ${url} =====\n\n`;
 
@@ -139,7 +139,7 @@ Cypress._.each(urls, (url) => {
 
     it('Checking Button Interaction', () => {
       cy.log('Teste interaçao de botão');
-      cy.wait(1200);
+      cy.wait(2000);
 
       fullReport += `\n\n===== Relatório de Interação com Botões - ${url} =====\n\n`;
 
@@ -155,22 +155,45 @@ Cypress._.each(urls, (url) => {
           const selector = `${tagName}${id}${className}`;
 
           const initial = {
-            color: button.css('color'),
-            backgroundColor: button.css('background-color'),
-            borderColor: button.css('border-color'),
-            opacity: button.css('opacity'),
+            color: button.css('color'), //cor do texto
+            backgroundColor: button.css('background-color'), //cor do fundo
+            borderColor: button.css('border-color'), //cor da borda
+            border: button.css('border'), //tamanho da borda
+            opacity: button.css('opacity'), // transparencia
             textDecoration: button.css('text-decoration'),
+            textDecorationLine: button.css('text-decoration-line'),
+
+            fontWeight: button.css('font-weight'), //Alteração na Forma da fonte: Normal, Negrito, Itálico, Etc.
+            transform: button.css('transform'), //Caputar efeitos como scale, rotate e translate
+            boxShadow: button.css('box-shadow'), //sombras que aparecem no hover
+            cursor: button.css('cursor'), //mouse vira um pointer
+            textShadow: button.css('text-shadow'), //botões com efeito de destaque
+            outline: button.css('outline'), //contorno
+            borderRadius: button.css('border-radius'), //borda arrendondada
+            transition: button.css('transition') //transição
           };
 
           cy.wrap(button).should('be.visible').realHover();
           cy.wait(300);
+
           cy.wrap(button).then(($el) => {
             const current = {
               color: $el.css('color'),
               backgroundColor: $el.css('background-color'),
               borderColor: $el.css('border-color'),
+              border: $el.css('border'),
               opacity: $el.css('opacity'),
-              textDecoration: $el.css('text-decoration')
+              textDecoration: $el.css('text-decoration'),
+              textDecorationLine: $el.css('text-decoration-line'),
+              fontWeight: $el.css('font-weight'),
+              
+              transform: $el.css('transform'),
+              boxShadow: $el.css('box-shadow'),
+              cursor: $el.css('cursor'),
+              textShadow: $el.css('text-shadow'),
+              outline: $el.css('outline'),
+              borderRadius: $el.css('border-radius'),
+              transition: $el.css('transition')
             };
 
             const changed = Object.keys(initial).some(key => initial[key] !== current[key]);
