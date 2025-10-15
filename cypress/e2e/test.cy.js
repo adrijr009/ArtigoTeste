@@ -22,35 +22,39 @@ Cypress._.each(urls, (url) => {
     after(() => {
       cy.task('generateHtml', {
         fileName: `final-report-${sanitizedUrl}`,
-        title: `Relatório de Acessibilidade e Navegação - ${url}`,
+        title: `Accessibility and Navegation Report - ${url}`,
         content: fullReport
       });
     });
 
     it('Accessibility Violations', () => {
       cy.log('Teste de acessibilidade');
-      cy.wait(2000);
+      cy.wait(1000);
 
       cy.checkA11y(null, null, (violations) => {
-        fullReport += `===== Relatório de Acessibilidade - ${url} =====\n\n`;
-        fullReport += `Total de violações: ${violations.length}\n\n`;
+        fullReport += `===== Accessibility Report - ${url} =====\n\n`;
+        fullReport += `Total of Violatins: ${violations.length}\n\n`;
 
         violations.forEach(({ id, impact, description, nodes, tags, help, helpUrl }) => {
           const wcagLevel = tags.includes('wcag2a') ? 'A' :
             tags.includes('wcag2aa') ? 'AA' :
-              tags.includes('wcag2aaa') ? 'AAA' : 'Desconhecido';
+              tags.includes('wcag2aaa') ? 'AAA' : 'Unknown';
 
           fullReport += `ID: ${id}\n`;
-          fullReport += `Impacto: ${impact}\n`;
-          fullReport += `Nível WCAG: ${wcagLevel}\n`;
-          fullReport += `Descrição: ${description}\n`;
-          fullReport += `Sugestão: ${help}\n`;
-          fullReport += `Mais informações: ${helpUrl}\n`;
+          fullReport += `Impact: ${impact}\n`;
+          fullReport += `WCAG Level: ${wcagLevel}\n`;
+          fullReport += `Description: ${description}\n`;
+          fullReport += `Sugestions: ${help}\n`;
+          fullReport += `More Details: ${helpUrl}\n`;
           fullReport += `Tags: ${tags.join(', ')}\n`;
+          fullReport += `Total Elements Affected: ${nodes.length}\n\n`;
 
-          nodes.forEach(({ target, html }) => {
-            fullReport += `  - Elemento: ${target.join(', ')}\n`;
-            fullReport += `    Código: ${html}\n`;
+          // Lista de elementos impactados
+          nodes.forEach(({ target, html }, idx) => {
+            const elementSelector = target.join(', ');
+            const htmlSnippet = html.trim().slice(0, 200).replace(/\n/g, '');
+            fullReport += `  ${idx + 1}. Element: ${elementSelector}\n`;
+            fullReport += `     HTML: ${htmlSnippet}...\n`;
           });
 
           fullReport += `_________________________________________________________________________\n\n`;
@@ -60,9 +64,9 @@ Cypress._.each(urls, (url) => {
 
     it('Simulate navigation via Tab', () => {
       cy.log('Iniciando teste de navegação com TAB manual');
-      cy.wait(2000);
+      cy.wait(1000);
 
-      fullReport += `\n\n===== Relatório de Navegação via TAB - ${url} =====\n\n`;
+      fullReport += `\n\n===== Tab Navegation Report - ${url} =====\n\n`;
 
       const isFocusable = ($el) => {
         const tag = $el.prop('tagName').toLowerCase();
@@ -78,6 +82,8 @@ Cypress._.each(urls, (url) => {
         .then(($elements) => {
           const total = $elements.length;
 
+          fullReport += `Elements Found: ${total}\n`
+
           const processElement = (index) => {
             if (index >= total) return; // fim da recursão
 
@@ -91,9 +97,9 @@ Cypress._.each(urls, (url) => {
             const selector = `${tagName}${id}${className}`;
             const htmlSnippet = $el.prop('outerHTML').trim().slice(0, 300);
 
-            let report;
-            report += `Elemento ${index + 1} de ${total}: ${label}\n`;
-            report += `  → Seletor: ${selector}\n`;
+            let report = '';
+            report += `  ${index + 1}. ${label}\n`;
+            report += `  → Selector: ${selector}\n`;
             report += `  → HTML: ${htmlSnippet}...\n`;
 
             const isFocusable = ($el) => {
@@ -105,7 +111,7 @@ Cypress._.each(urls, (url) => {
             };
 
             if (!isFocusable($el)) {
-              report += `⚠️ AVISO: Elemento não é focável.\n`;
+              report += `  ⚠️ AVISO: Elemento não é focável.\n`;
               report += `_______________________________________________________________________\n`;
               fullReport += `\n${report}`;
               processElement(index + 1);
@@ -119,12 +125,12 @@ Cypress._.each(urls, (url) => {
 
                 cy.focused().then(($focused) => {
                   if (!$focused.is(':visible')) {
-                    report += `⚠️ ERRO: O elemento focado não está visível!\n`;
-                    report += `    Era esperado o Elemento ${index + 1} de ${total}\n`;
+                    report += `  ⚠️ ERRO: O elemento focado não está visível!\n`;
+                    report += `  Era esperado o Elemento ${index + 1} de ${total}\n`;
                   } else if ($focused[0] !== $el[0]) {
-                    report += `❌ ERRO: O foco não foi aplicado corretamente \n`;
+                    report += `  ❌ ERRO: O foco não foi aplicado corretamente \n`;
                   } else {
-                    report += `✅ Foco aplicado com sucesso \n`;
+                    report += `  ✅ Foco aplicado com sucesso \n`;
                   }
                   report += `_______________________________________________________________________\n`;
                   fullReport += `\n${report}`;
@@ -139,7 +145,7 @@ Cypress._.each(urls, (url) => {
 
     it('Checking Button Interaction', () => {
       cy.log('Teste interaçao de botão');
-      cy.wait(2000);
+      cy.wait(1000);
 
       fullReport += `\n\n===== Relatório de Interação com Botões - ${url} =====\n\n`;
 
@@ -147,6 +153,7 @@ Cypress._.each(urls, (url) => {
         .filter(':visible')
         .not('[disabled], [aria-expanded], [data-role="none"]')
         .each(($btns, index) => {
+          const total = $btns.length;
           const label = $btns.text().trim() || $btns.attr('aria-label') || 'Sem descrição';
           const button = Cypress.$($btns);
           const tagName = button.prop('tagName');
@@ -186,7 +193,7 @@ Cypress._.each(urls, (url) => {
               textDecoration: $el.css('text-decoration'),
               textDecorationLine: $el.css('text-decoration-line'),
               fontWeight: $el.css('font-weight'),
-              
+
               transform: $el.css('transform'),
               boxShadow: $el.css('box-shadow'),
               cursor: $el.css('cursor'),
@@ -198,7 +205,7 @@ Cypress._.each(urls, (url) => {
 
             const changed = Object.keys(initial).some(key => initial[key] !== current[key]);
 
-            fullReport += `Botão ${index + 1}: ${label}\n`;
+            fullReport += `  Button ${index + 1}: ${label}\n`;
             fullReport += `  → Seletor: ${selector}\n`;
             fullReport += `  → HTML: ${button.prop('outerHTML').trim().slice(0, 300)}...\n`;
             fullReport += changed ? '  ✅ Mudança detectada ao passar o mouse.\n' : '  ⚠️ Nenhuma mudança detectada!\n';
