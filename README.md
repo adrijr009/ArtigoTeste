@@ -2,7 +2,7 @@
 
 Para instalar o Cypress utilize o comando:
 
-npm install cypress
+npm install cypress --save-dev
 
 Para instalar as dependencias é necessário o comandos:
 
