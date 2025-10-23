@@ -33,7 +33,7 @@ Cypress._.each(urls, (url) => {
 
       cy.checkA11y(null, null, (violations) => {
         fullReport += `===== Accessibility Report - ${url} =====\n\n`;
-        fullReport += `Total of Violatins: ${violations.length}\n\n`;
+        fullReport += `Total of Violations: ${violations.length}\n\n`;
 
         violations.forEach(({ id, impact, description, nodes, tags, help, helpUrl }) => {
           const wcagLevel = tags.includes('wcag2a') ? 'A' :
