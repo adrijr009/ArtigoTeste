@@ -10,13 +10,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "cypress": "^13.17.0",
-    "cypress-real-events": "^1.13.0"
-  },
   "devDependencies": {
-    "cypress-axe": "^1.6.0",
+    "cypress": "^15.5.0",
+    "cypress-axe": "^1.7.0",
     "cypress-plugin-tab": "^1.0.5",
-    "cypress-real-events": "^1.14.0"
+    "cypress-real-events": "^1.15.0"
   }
 }
