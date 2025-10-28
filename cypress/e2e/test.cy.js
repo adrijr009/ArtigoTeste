@@ -31,36 +31,45 @@ Cypress._.each(urls, (url) => {
       cy.log('Teste de acessibilidade');
       cy.wait(1000);
 
-      cy.checkA11y(null, null, (violations) => {
-        fullReport += `===== Accessibility Report - ${url} =====\n\n`;
-        fullReport += `Total of Violations: ${violations.length}\n\n`;
+      cy.window().then((win) => {
+        return win.axe.run().then((results) => {
+          // Junta os problemas conhecidos e possíveis em um único array
+          const allIssues = [
+            ...results.violations.map(v => ({ ...v, tipo: 'Problema Conhecido' })),
+            ...results.incomplete.map(v => ({ ...v, tipo: 'Problema Possível' }))
+          ];
 
-        violations.forEach(({ id, impact, description, nodes, tags, help, helpUrl }) => {
-          const wcagLevel = tags.includes('wcag2a') ? 'A' :
-            tags.includes('wcag2aa') ? 'AA' :
-              tags.includes('wcag2aaa') ? 'AAA' : 'Unknown';
+          fullReport += `===== Accessibility Report - ${url} =====\n\n`;
+          fullReport += `Total de Itens Detectados: ${allIssues.length}\n\n`;
 
-          fullReport += `ID: ${id}\n`;
-          fullReport += `Impact: ${impact}\n`;
-          fullReport += `WCAG Level: ${wcagLevel}\n`;
-          fullReport += `Description: ${description}\n`;
-          fullReport += `Sugestions: ${help}\n`;
-          fullReport += `More Details: ${helpUrl}\n`;
-          fullReport += `Tags: ${tags.join(', ')}\n`;
-          fullReport += `Total Elements Affected: ${nodes.length}\n\n`;
+          allIssues.forEach(({ id, impact, description, nodes, tags, help, helpUrl, tipo }) => {
+            const wcagLevel = tags.includes('wcag2a') ? 'A' :
+              tags.includes('wcag2aa') ? 'AA' :
+                tags.includes('wcag2aaa') ? 'AAA' : 'Unknown';
 
-          // Lista de elementos impactados
-          nodes.forEach(({ target, html }, idx) => {
-            const elementSelector = target.join(', ');
-            const htmlSnippet = html.trim().slice(0, 200).replace(/\n/g, '');
-            fullReport += `  ${idx + 1}. Element: ${elementSelector}\n`;
-            fullReport += `     HTML: ${htmlSnippet}...\n`;
+            fullReport += `ID: ${id}\n`;
+            fullReport += `Tipo: ${tipo}\n`;
+            fullReport += `Impact: ${impact || 'Unknown'}\n`;
+            fullReport += `WCAG Level: ${wcagLevel}\n`;
+            fullReport += `Description: ${description}\n`;
+            fullReport += `Sugestions: ${help}\n`;
+            fullReport += `More Details: ${helpUrl}\n`;
+            fullReport += `Tags: ${tags.join(', ')}\n`;
+            fullReport += `Total Elements: ${nodes.length}\n\n`;
+
+            nodes.forEach(({ target, html }, idx) => {
+              const elementSelector = target.join(', ');
+              const htmlSnippet = html.trim().slice(0, 200).replace(/\n/g, '');
+              fullReport += `  ${idx + 1}. Element: ${elementSelector}\n`;
+              fullReport += `     HTML: ${htmlSnippet}...\n`;
+            });
+
+            fullReport += `_________________________________________________________________________\n\n`;
           });
-
-          fullReport += `_________________________________________________________________________\n\n`;
         });
-      }, { skipFailures: true });
+      });
     });
+
 
     it('Simulate navigation via Tab', () => {
       cy.log('Iniciando teste de navegação com TAB manual');
