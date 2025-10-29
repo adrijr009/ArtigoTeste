@@ -31,6 +31,14 @@ Cypress._.each(urls, (url) => {
       cy.log('Teste de acessibilidade');
       cy.wait(1000);
 
+      // Configura para validar até o nível AAA da WCAG 2.1
+      cy.configureAxe({
+        runOnly: {
+          type: 'tag',
+          values: ['wcag21a', 'wcag21aa', 'wcag21aaa']
+        }
+      });
+
       cy.window().then((win) => {
         return win.axe.run().then((results) => {
           // Junta os problemas conhecidos e possíveis em um único array
@@ -43,9 +51,11 @@ Cypress._.each(urls, (url) => {
           fullReport += `Total de Itens Detectados: ${allIssues.length}\n\n`;
 
           allIssues.forEach(({ id, impact, description, nodes, tags, help, helpUrl, tipo }) => {
-            const wcagLevel = tags.includes('wcag2a') ? 'A' :
-              tags.includes('wcag2aa') ? 'AA' :
-                tags.includes('wcag2aaa') ? 'AAA' : 'Unknown';
+            const wcagLevel =
+              tags.includes('wcag21aaa') || tags.includes('wcag2aaa') ? 'AAA' :
+                tags.includes('wcag21aa') || tags.includes('wcag2aa') ? 'AA' :
+                  tags.includes('wcag21a') || tags.includes('wcag2a') ? 'A' :
+                    'Unknown';
 
             fullReport += `ID: ${id}\n`;
             fullReport += `Tipo: ${tipo}\n`;
@@ -69,7 +79,6 @@ Cypress._.each(urls, (url) => {
         });
       });
     });
-
 
     it('Simulate navigation via Tab', () => {
       cy.log('Iniciando teste de navegação com TAB manual');
