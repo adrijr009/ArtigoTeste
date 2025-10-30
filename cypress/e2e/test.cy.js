@@ -31,13 +31,7 @@ Cypress._.each(urls, (url) => {
       cy.log('Teste de acessibilidade');
       cy.wait(1000);
 
-      // Configura para validar até o nível AAA da WCAG 2.1
-      cy.configureAxe({
-        runOnly: {
-          type: 'tag',
-          values: ['wcag21a', 'wcag21aa', 'wcag21aaa']
-        }
-      });
+      cy.configureAxe();
 
       cy.window().then((win) => {
         return win.axe.run().then((results) => {
