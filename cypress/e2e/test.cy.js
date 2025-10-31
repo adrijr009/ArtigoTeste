@@ -74,83 +74,99 @@ Cypress._.each(urls, (url) => {
       });
     });
 
-    it('Simulate navigation via Tab', () => {
-      cy.log('Iniciando teste de navegação com TAB manual');
+    it('Simulate navigation via Tab with visual feedback validation', () => {
+      cy.log('Iniciando teste de navegação com TAB e destaque visual');
       cy.wait(1000);
 
-      fullReport += `\n\n===== Tab Navegation Report - ${url} =====\n\n`;
-
-      const isFocusable = ($el) => {
-        const tag = $el.prop('tagName').toLowerCase();
-        const isLinkWithHref = tag === 'a' && $el.attr('href');
-        const hasTabindex = $el.attr('tabindex') !== undefined;
-        const isNaturallyFocusable = ['input', 'select', 'textarea', 'button'].includes(tag);
-        return isLinkWithHref || hasTabindex || isNaturallyFocusable;
-      };
+      fullReport += `\n\n===== Tab Navigation Visual Report - ${url} =====\n\n`;
 
       cy.get('button, a, input, select, textarea, [tabindex]:not([tabindex="-1"])')
         .filter(':visible')
         .not('[disabled]')
         .then(($elements) => {
           const total = $elements.length;
-
-          fullReport += `Elements Found: ${total}\n`
+          fullReport += `Elements Found: ${total}\n`;
 
           const processElement = (index) => {
-            if (index >= total) return; // fim da recursão
+            if (index >= total) return;
 
             const el = $elements[index];
             const $el = Cypress.$(el);
 
-            const label = $el.text().trim() || $el.attr('aria-label') || $el.attr('placeholder') || 'Sem descrição';
+            const label =
+              $el.text().trim() ||
+              $el.attr('aria-label') ||
+              $el.attr('placeholder') ||
+              'Sem descrição';
             const tagName = $el.prop('tagName');
             const id = $el.attr('id') ? `#${$el.attr('id')}` : '';
-            const className = $el.attr('class') ? `.${$el.attr('class').split(' ').join('.')}` : '';
+            const className = $el.attr('class')
+              ? `.${$el.attr('class').split(' ').join('.')}`
+              : '';
             const selector = `${tagName}${id}${className}`;
             const htmlSnippet = $el.prop('outerHTML').trim().slice(0, 300);
 
             let report = '';
-            report += `  ${index + 1}. ${label}\n`;
-            report += `  → Selector: ${selector}\n`;
-            report += `  → HTML: ${htmlSnippet}...\n`;
-
-            const isFocusable = ($el) => {
-              const tag = $el.prop('tagName').toLowerCase();
-              const isLinkWithHref = tag === 'a' && $el.attr('href');
-              const hasTabindex = $el.attr('tabindex') !== undefined;
-              const isNaturallyFocusable = ['input', 'select', 'textarea', 'button'].includes(tag);
-              return isLinkWithHref || hasTabindex || isNaturallyFocusable;
-            };
-
-            if (!isFocusable($el)) {
-              report += `  ⚠️ AVISO: Elemento não é focável.\n`;
-              report += `_______________________________________________________________________\n`;
-              fullReport += `\n${report}`;
-              processElement(index + 1);
-              return;
-            }
+            report += `\n${index + 1}. ${label}\n`;
+            report += `→ Selector: ${selector}\n`;
+            report += `→ HTML: ${htmlSnippet}...\n`;
 
             cy.wrap($el)
               .scrollIntoView()
               .then(() => {
+                // Captura o estilo antes do foco
+                const beforeStyles = {
+                  outline: $el.css('outline'),
+                  boxShadow: $el.css('box-shadow'),
+                  borderColor: $el.css('border-color'),
+                  background: $el.css('background-color'),
+                  color: $el.css('color'),
+                  transform: $el.css('transform'),
+                };
+
+                // Aplica o foco
                 $el[0].focus();
 
                 cy.focused().then(($focused) => {
+                  // Captura o estilo após o foco
+                  const afterStyles = {
+                    outline: $focused.css('outline'),
+                    boxShadow: $focused.css('box-shadow'),
+                    borderColor: $focused.css('border-color'),
+                    background: $focused.css('background-color'),
+                    color: $focused.css('color'),
+                    transform: $focused.css('transform'),
+                  };
+
+                  // Verifica diferença visual
+                  const changed =
+                    beforeStyles.outline !== afterStyles.outline ||
+                    beforeStyles.boxShadow !== afterStyles.boxShadow ||
+                    beforeStyles.borderColor !== afterStyles.borderColor ||
+                    beforeStyles.background !== afterStyles.background ||
+                    beforeStyles.color !== afterStyles.color ||
+                    beforeStyles.transform !== afterStyles.transform;
+
                   if (!$focused.is(':visible')) {
-                    report += `  ⚠️ ERRO: O elemento focado não está visível!\n`;
-                    report += `  Era esperado o Elemento ${index + 1} de ${total}\n`;
+                    report += `⚠️ Elemento não está visível!\n`;
                   } else if ($focused[0] !== $el[0]) {
-                    report += `  ❌ ERRO: O foco não foi aplicado corretamente \n`;
+                    report += `❌ Não é possivel chegar nesse elemento por Tab.\n`;
+                  } else if (changed) {
+                    report += `✅ Destaque visual detectado.\n`;
                   } else {
-                    report += `  ✅ Foco aplicado com sucesso \n`;
+                    report += `⚠️ Nenhum destaque visual detectado.\n`;
                   }
+
+                  // Adiciona ao relatório final
                   report += `_______________________________________________________________________\n`;
-                  fullReport += `\n${report}`;
-                  processElement(index + 1); // chama o próximo na sequência
+                  fullReport += report;
+
+                  // Passa ao próximo elemento
+                  processElement(index + 1);
                 });
               });
           };
-          // Inicia a recursão no primeiro elemento
+
           processElement(0);
         });
     });
@@ -220,7 +236,7 @@ Cypress._.each(urls, (url) => {
             fullReport += `  Button ${index + 1}: ${label}\n`;
             fullReport += `  → Seletor: ${selector}\n`;
             fullReport += `  → HTML: ${button.prop('outerHTML').trim().slice(0, 300)}...\n`;
-            fullReport += changed ? '  ✅ Mudança detectada ao passar o mouse.\n' : '  ⚠️ Nenhuma mudança detectada!\n';
+            fullReport += changed ? '  ✅ Destaque detectado ao passar o mouse.\n' : '  ⚠️ Nenhuma destaque detectado!\n';
             fullReport += `  ________________________________________________________________________\n\n`;
 
             // Evita falha do teste interromper o restante
